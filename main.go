@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	m := make(map[string]bool)
 	file, _ := os.Open("acode.xlsx")
 	all, err := io.ReadAll(file)
 	if err != nil {
@@ -39,6 +40,10 @@ func main() {
 		code := row.GetCell(1).Value
 		slog.Info("获取当前行", slog.String("name", name), slog.String("code", code))
 		s := strings.Join([]string{"\"", name, "\":\"", code, "\",\n"}, "")
-		openFile.WriteString(s)
+		if _, ok := m[name]; !ok {
+			openFile.WriteString(s)
+			m[name] = true
+		}
+
 	}
 }
